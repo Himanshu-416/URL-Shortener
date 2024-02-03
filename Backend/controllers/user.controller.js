@@ -39,4 +39,38 @@ const registerUser = asyncHandler(async (req, res) => {
 
 });
 
-export { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+  //get data from request
+  const { email, password } = req.body;
+
+  //validate the data
+  if ([email, password].some((field) => field?.trim() === "")) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  //find user using email
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  //match password
+  const isPasswordMatch = await user.isPasswordMatch(password);
+
+  //generate token
+  const token = user.generateToken();
+
+  console.log(token);
+
+  //set token in cookie
+  res.cookie("token", token)
+
+  //set user in header
+  req.user = user
+
+  //send responce
+  res.status(200).json(new ApiResponce(200, "User logged in successfully", { _id: user._id, username: user.username, email: user.email }));
+});
+
+export { registerUser, loginUser };
