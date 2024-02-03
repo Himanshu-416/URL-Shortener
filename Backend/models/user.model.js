@@ -26,15 +26,15 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-mongoose.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
   const password = this.password
-  if(isModified("password")){
+  if(this.isModified("password")){
     this.password = await bcrypt.hash(password, 10)
   }
   next()
 })
 
-mongoose.methods.isPasswordMatch = async function (password) {
+UserSchema.methods.isPasswordMatch = async function (password) {
   return await bcrypt.compare(password, this.password);
 }
 
