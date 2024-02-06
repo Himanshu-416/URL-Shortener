@@ -8,11 +8,15 @@ const PORT = process.env.PORT || 8000;
 
 dotenv.config({ path: "./.env" });
 
+//import custom middlewares
+import Auth from "./middlewares/Auth.js";
+
 //middlewares setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookie());
+app.use(Auth())
 
 //import routers
 import userRouter from "./routes/user.routes.js";
@@ -29,3 +33,5 @@ connectDB()
   .catch((err) => {
     console.log("MongoDB connection failed", err);
   });
+
+  
