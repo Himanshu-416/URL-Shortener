@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input-primary {
+    @apply border-2 p-2 rounded-lg outline-none focus:bg-slate-100 text-xl
+  }
+}

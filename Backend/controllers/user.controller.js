@@ -3,12 +3,9 @@ import ApiError from "../utils/ApiError.js";
 import User from "../models/user.model.js";
 import ApiResponce from "../utils/ApiResponce.js";
 
-const registerUser = asyncHandler(async (req, res) => {
-
+const registerUser = asyncHandler(async (req, res, next) => {
   //get data from request
   const { username, email, password } = req.body;
-
-  console.log(username, email, password);
 
   //validate the data
   if ([username, email, password].some((field) => field?.trim() === "")) {
@@ -35,8 +32,15 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to create user");
   }
 
-  res.status(201).json(new ApiResponce(201, "User created", {_id: user._id, username: user.username, email: user.email}));
-
+  res
+    .status(201)
+    .json(
+      new ApiResponce(201, "User created", {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+      })
+    );
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -73,4 +77,10 @@ const loginUser = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponce(200, "User logged in successfully", { _id: user._id, username: user.username, email: user.email }));
 });
 
-export { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req, res) => {
+  res.clearCookie("token")
+
+  res.status(200).json(new ApiResponce(200, "User logged out successfully", null))
+})
+
+export { registerUser, loginUser, logoutUser };

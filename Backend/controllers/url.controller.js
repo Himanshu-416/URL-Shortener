@@ -4,8 +4,6 @@ import { nanoid } from "nanoid";
 import ApiResponce from "../utils/ApiResponce.js";
 import ApiError from "../utils/ApiError.js";
 
-console.log(nanoid(6));
-
 const createUrl = asyncHandler(async (req, res) => {
   //get the original URL
   const { url } = req.body;
@@ -22,9 +20,10 @@ const createUrl = asyncHandler(async (req, res) => {
     shortUrl: shortId,
   });
 
-  res
+  console.log(shortId);
+  return res
     .status(201)
-    .json(ApiResponce(201, "URL created successfully", { shortId }));
+    .json(new ApiResponce(201, "URL created successfully", { shortId }));
 });
 
 const redirectUrl = asyncHandler(async (req, res) => {
