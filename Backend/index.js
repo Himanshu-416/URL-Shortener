@@ -20,9 +20,11 @@ app.use(Auth())
 
 //import routers
 import userRouter from "./routes/user.routes.js";
+import urlRouter from "./routes/url.routes.js";	
 
 //implement routers
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/url", urlRouter);	
 
 connectDB()
   .then(
